@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	id:<input type="text" name="id" id="id"/><br><br>
+	Name:<input type="text" name="name" id="name"/><br><br>
+	Department:<input type="text" name="dept" id="dept"/><br><br>
+	Salary : <input type="text" name="sal" id="sal"/><br><br>
+	Mode:<select id="selectt">
+	<option>Edit</option>
+	<option>Add</option>
+	<option>Delete</option>
+	</select> <br><br>
+	<button name="first" onclick="first()">First</button>
+	<button name="next" onclick="next()">Next</button>
+	<button name="previous" onclick="prev()">previous</button>
+	<button name="last" onclick="last()">last</button><br><br>
+	<button name="edit" id="edit" onclick="edit()">edit</button>
+	<button name="save" onclick="save()">save</button>
+	<button name="add" onclick="add()">add</button>
+	<button name="delete" onclick="deletee()">Delete</button><br><br>
+	<button name="exit">Exit</button>
+	<button name="clear">Clear</button>
+	<button name="search">Search</button>
+</body>
+
+
+<script>
+var xhr = new XMLHttpRequest();
+var x = localStorage.getItem("EmployeeData");
+var EmployeeData = JSON.parse(x);
+var id = document.getElementById("id");
+var names = document.getElementById("name");
+var dept = document.getElementById("dept");
+var sal = document.getElementById("sal");
+var state = localStorage.getItem("state") || 0;
+
+function updateFields(index) {
+	id.value = EmployeeData[index].id;
+	names.value = EmployeeData[index].name;
+	dept.value = EmployeeData[index].dept;
+	sal.value = EmployeeData[index].salary;
+}
+
+function first() {
+	state = 0;
+	updateFields(state);
+	localStorage.setItem("state", state);
+}
+
+function next() {
+	state = (state + 1) % EmployeeData.length;
+	updateFields(state);
+	localStorage.setItem("state", state);
+}
+
+function prev() {
+	state = (state - 1 + EmployeeData.length) % EmployeeData.length;
+	updateFields(state);
+	localStorage.setItem("state", state);
+}
+
+function last() {
+	state = EmployeeData.length - 1;
+	updateFields(state);
+	localStorage.setItem("state", state);
+}
+
+function edit(){
+	var x = document.getElementById("selectt");
+	 x.selectedIndex = 0; 
+	 localStorage.setItem("mode","0");
+}
+
+function add(){
+	var x = document.getElementById("selectt");
+	 x.selectedIndex = 1; 
+	 localStorage.setItem("mode","1");
+}
+
+function deletee(){
+	var x = document.getElementById("selectt");
+	 x.selectedIndex = 2;
+	 localStorage.setItem("mode","2");
+}
+
+function save(){
+	const op = localStorage.getItem("mode");
+	if(mode.equals("0")){
+		xhr.open("GET",`http://localhost:8080/Employeee/logic?mode=${op}`,true);
+	}
+	else if(mode.equals("1")){
+   	const op = localStorage.getItem("mode");
+   	xhr.open("GET",`http://localhost:8080/Employeee/logic?mode=${op}`,true);
+	}
+	else if(mode.equals("2")){
+	const op = localStorage.getItem("mode");
+	xhr.open("GET",`http://localhost:8080/Employeee/logic?mode=${op}`,true);	
+	}
+}
+
+
+$(document).ready(function(){
+	xhr.open("GET","http://localhost:8080/Employeee/EmpServlet",true);
+});
+console.log(x);
+
+
+</script>
+</html>
